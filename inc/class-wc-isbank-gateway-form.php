@@ -33,7 +33,7 @@ class WC_Isbank_Gateway_Form {
 
                                 <p class="form-row form-row-wide">
                                     <label for="isbank-card-number">
-                                        <?php echo __( 'Kart numarası', 'wc-isbank' ); ?>
+                                        <?php echo __( 'Card Number', 'wc-isbank' ); ?>
                                         <span class="required">*</span>
                                     </label>
 
@@ -46,7 +46,7 @@ class WC_Isbank_Gateway_Form {
 
                                 <p class="form-row form-row-first">
                                     <label for="isbank-card-expiry">
-                                        <?php echo __( 'Vade (MM / YYYY)', 'wc-isbank' ); ?>
+                                        <?php echo __( 'Expiry Date', 'wc-isbank' ); ?>
                                         <span class="required">*</span>
                                     </label>
 
@@ -58,7 +58,7 @@ class WC_Isbank_Gateway_Form {
                                 </p>
                                 <p class="form-row form-row-last">
                                     <label for="isbank-card-cvc">
-                                        <?php echo __( 'Güvenlik Kodu', 'wc-isbank' ); ?>
+                                        <?php echo __( 'CVV/CVC', 'wc-isbank' ); ?>
                                         <span class="required">*</span>
                                     </label>
 
@@ -66,7 +66,7 @@ class WC_Isbank_Gateway_Form {
                                            inputmode="numeric" autocomplete="off" autocorrect="no" autocapitalize="no"
                                            spellcheck="no" type="tel" maxlength="4" placeholder="CVC"
                                            name="isbank-card-cvc" style="width:75px"/>
-                                </p>
+                                </p> 
                                 <div class="clear"></div>
 
                                 <input type="hidden" name="clientid" value="<?php echo $args['client_id'] ?>"/>
@@ -77,14 +77,13 @@ class WC_Isbank_Gateway_Form {
                                 <input type="hidden" name="rnd" value="<?php echo $rnd; ?>"/>
                                 <input type="hidden" name="hash" value="<?php echo $hash; ?>"/>
                                 <input type="hidden" name="storetype" value="3D"/>
-                                <input type="hidden" name="lang" value="tr"/>
-                                <input type="hidden" name="currency" value="949"/>
+                                <input type="hidden" name="lang" value="en"/>
                                 <input type="hidden" name="islemtipi" value="Auth"/>
                                 <input type="hidden" name="taksit" value=""/>
                             </fieldset>
                         </div>
                     </li>
-                    <input type="submit" class="button alt" value="<?php echo __( 'Siparişi onayla', 'wc-isbank' ); ?>"/>
+                    <input type="submit" class="button alt" value="<?php echo __( 'Place Order', 'wc-isbank' ); ?>"/>
                 </ul>
             </div>
         </form>
@@ -101,7 +100,7 @@ class WC_Isbank_Gateway_Form {
 
 			echo json_encode( array(
 				'result' => 'failure',
-				'msg'    => __( 'Tüm ödeme bilgi alanlarını doldurmalısın.', 'wc-isbank' )
+				'msg'    => __( 'All fields are required.', 'wc-isbank' )
 			) );
 			wp_die();
 		}
@@ -112,7 +111,7 @@ class WC_Isbank_Gateway_Form {
 		if ( strlen( $expiry_date[1] ) < 4 ) {
 			echo json_encode( array(
 				'result' => 'failure',
-				'msg'    => __( 'Kart vade yılını 4 basamaklı girmelisin.', 'wc-isbank' )
+				'msg'    => __( 'Expire date must be 4 digit.', 'wc-isbank' )
 			) );
 			wp_die();
 		}
@@ -121,7 +120,7 @@ class WC_Isbank_Gateway_Form {
 
 			echo json_encode( array(
 				'result' => 'failure',
-				'msg'    => __( 'Vadesi dolmuş kart ile ödeme yapamazsın.', 'wc-isbank' )
+				'msg'    => __( 'Its not possible to make payment with an expired card.', 'wc-isbank' )
 			) );
 			wp_die();
 		}
