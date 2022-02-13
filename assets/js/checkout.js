@@ -1,4 +1,4 @@
-$(document).ready(function () {
+jQuery(document).ready(function () {
     $('.wc-isbank-checkout').submit(function (e) {
         e.preventDefault();
         e.stopPropagation();
