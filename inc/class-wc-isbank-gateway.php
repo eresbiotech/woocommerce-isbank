@@ -11,7 +11,7 @@ class WC_Isbank_Gateway extends WC_Payment_Gateway {
 
 	public function __construct() {
 		$this->id                 = 'isbank';
-		$this->title              = __( 'Kredi Kartı', 'wc-isbank' );
+		$this->title              = __( 'Credit Card', 'wc-isbank' );
 		$this->method_title       = __( 'Türkiye İş Bankası - WooCommerce', 'wc-isbank' );
 		$this->method_description = __( '', 'wc-isbank' );
 		$this->supports           = array( 'products', 'refunds' );
@@ -112,13 +112,13 @@ class WC_Isbank_Gateway extends WC_Payment_Gateway {
 			} else {
 				$error_message = (string) $result->ErrMsg;
 				wc_add_notice( $error_message, 'error' );
-				$order->add_order_note( __( 'Ödeme banka tarafından reddedildi.', 'wc-isbank' ) );
+				$order->add_order_note( __( 'Payment denied by bank.', 'wc-isbank' ) );
 
 				wp_redirect( $woocommerce->cart->get_cart_url() );
 				exit;
 			}
 		} else {
-			wc_add_notice( __( '3D Doğrulama başarısız.', 'wc-isbank' ), 'error' );
+			wc_add_notice( __( '3D confirmation failed.', 'wc-isbank' ), 'error' );
 			wp_redirect( $woocommerce->cart->get_cart_url() );
 			exit;
 		}
