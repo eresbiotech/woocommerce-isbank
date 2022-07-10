@@ -14,6 +14,7 @@ class WC_Isbank_Gateway_Form {
 		$return_url = get_home_url() . "/wc-api/wc_gateway_isbank";
 		$amount     = $order->order_total;
 		$rnd        = microtime();
+		$instalment_enabled = $args['instalment_enabled'];
 		$taksit     = '';
 		$hashstr    = $args['client_id'] . $args['order_id'] . $amount . $return_url . $return_url . 'Auth' . $taksit . $rnd . $args['store_key'];
 		$hash       = base64_encode( pack( 'H*', sha1( $hashstr ) ) );
@@ -66,7 +67,33 @@ class WC_Isbank_Gateway_Form {
                                            inputmode="numeric" autocomplete="off" autocorrect="no" autocapitalize="no"
                                            spellcheck="no" type="tel" maxlength="4" placeholder="CVC"
                                            name="isbank-card-cvc" style="width:75px"/>
-                                </p> 
+				</p> 
+				<?php if($instalment_enabled === true):?>
+                                <p class="form-row form-row-wide">
+                                    <label for="isbank-installment">
+                                        <?php echo __( 'Installment', 'wc-isbank' ); ?>
+                                        <span class="required">*</span>
+                                    </label>
+				   <select id="isbank-installment" class="input-text wc-credit-card-form-installment"
+                                           placeholder="Taksit Istemiyorum"
+					   name="taksit">
+					<option value="">Tek Cekim</option>
+					<option value="2">2 Taksit</option>
+					<option value="3">3 Taksit</option>
+					<option value="4">4 Taksit</option>
+					<option value="5">5 Taksit</option>
+					<option value="6">6 Taksit</option>
+					<option value="7">7 Taksit</option>
+					<option value="8">8 Taksit</option>
+					<option value="9">9 Taksit</option>
+					<option value="10">10 Taksit</option>
+					<option value="11">11 Taksit</option>
+					<option value="12">12 Taksit</option>
+				   </select>
+				</p>
+				<?php else: ?>
+                                <input type="hidden" name="taksit" value=""/>
+				<?php endif; ?>
                                 <div class="clear"></div>
 
                                 <input type="hidden" name="clientid" value="<?php echo $args['client_id'] ?>"/>
@@ -75,11 +102,12 @@ class WC_Isbank_Gateway_Form {
                                 <input type="hidden" name="okUrl" value="<?php echo $return_url; ?>"/>
                                 <input type="hidden" name="failUrl" value="<?php echo $return_url; ?>"/>
                                 <input type="hidden" name="rnd" value="<?php echo $rnd; ?>"/>
-                                <input type="hidden" name="hash" value="<?php echo $hash; ?>"/>
+				<input type="hidden" name="hash" value="<?php echo $hash;?>"/>
                                 <input type="hidden" name="storetype" value="3D"/>
                                 <input type="hidden" name="lang" value="en"/>
                                 <input type="hidden" name="islemtipi" value="Auth"/>
-                                <input type="hidden" name="taksit" value=""/>
+				<input type="hidden" name="currency" value="<?php echo $args['currency'];?>"/>
+
                             </fieldset>
                         </div>
                     </li>
@@ -95,7 +123,7 @@ class WC_Isbank_Gateway_Form {
 
 	public static function validate_fields() {
 		if ( empty( $_POST['pan'] ) ||
-		     empty( $_POST['card_expriy'] ) ||
+		     empty( $_POST['card_expiry'] ) ||
 		     empty( $_POST['card_cvc'] ) ) {
 
 			echo json_encode( array(
@@ -105,7 +133,7 @@ class WC_Isbank_Gateway_Form {
 			wp_die();
 		}
 
-		$expiry_date = $_POST['card_expriy'];
+		$expiry_date = $_POST['card_expiry'];
 		$expiry_date = explode( ' / ', $expiry_date );
 
 		if ( strlen( $expiry_date[1] ) < 4 ) {
@@ -125,8 +153,14 @@ class WC_Isbank_Gateway_Form {
 			wp_die();
 		}
 
+		$hashstr = $_POST['hashstr'];
+		$instalment =$_POST['instalment'];
+		$hashstr = str_replace('##TAKSIT##',$instalment,$hashstr);
+
+
 		echo json_encode( array(
-			'result' => 'success'
+			'result' => 'success',
+//			'hash'=>$hash
 		) );
 		wp_die();
 	}

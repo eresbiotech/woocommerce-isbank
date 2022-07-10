@@ -32,6 +32,19 @@ class WC_Isbank_Gateway_Fields {
 			'api_user_password' => array(
 				'title' => __( 'API User password', 'wc-isbank' ),
 				'type'  => 'password'
+			),
+			'currency' => array(
+				'title' => __('Currency','wc-isbank'),
+				'type'=>'select',
+				'options'=>[
+					'949'=>'TRY',
+					'830'=>'USD',	
+				],
+				'default'=>'830'
+			),
+			'instalment'=>array(
+				'title'=> __('Instalment','wc-isbank'),
+				'type'=>'checkbox'	
 			)
 		);
 	}
