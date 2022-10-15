@@ -8,7 +8,9 @@ class WC_Isbank_Gateway extends WC_Payment_Gateway {
 
 	private $api_url = 'https://sanalpos.isbank.com.tr/fim/api';
 	private $est3Dgate_url = 'https://sanalpos.isbank.com.tr/fim/est3Dgate';
-
+	const CURRENCY_TRY = '949';
+	const CURRENCY_USD = '830';
+	private $instalment_enabled=false;
 	public function __construct() {
 		$this->id                 = 'isbank';
 		$this->title              = __( 'Credit Card', 'wc-isbank' );
@@ -43,6 +45,8 @@ class WC_Isbank_Gateway extends WC_Payment_Gateway {
 		$this->store_key         = $this->get_option( 'store_key' );
 		$this->api_user          = $this->get_option( 'api_user' );
 		$this->api_user_password = $this->get_option( 'api_user_password' );
+		$this->currency		 = $this->get_option( 'currency' , self::CURRENCY_USD);
+		$this->instalment_enabled = $this->get_option('instalment',false);
 	}
 
 	public function receipt_form( $order_id ) {
@@ -60,6 +64,8 @@ class WC_Isbank_Gateway extends WC_Payment_Gateway {
 			'store_key'  => $this->store_key,
 			'action_url' => $this->est3Dgate_url,
 			'order_id'   => $order_id,
+			'currency'   => $this->currency,
+			'instalment_enabled'=>$this->instalment_enabled
 		);
 
 		echo WC_Isbank_Gateway_Form::init_form( $args );
@@ -110,6 +116,7 @@ class WC_Isbank_Gateway extends WC_Payment_Gateway {
 				wp_redirect( $order->get_checkout_order_received_url() );
 				exit;
 			} else {
+				var_dump($result);exit;
 				$error_message = (string) $result->ErrMsg;
 				wc_add_notice( $error_message, 'error' );
 				$order->add_order_note( __( 'Payment denied by bank.', 'wc-isbank' ) );
@@ -132,7 +139,7 @@ class WC_Isbank_Gateway extends WC_Payment_Gateway {
 			'OrderId'  => $order_id,
 			'Type'     => 'Credit',
 			'Amount'   => $amount,
-			'Currency' => '949'
+			'Currency' => $this->currency,  //949=tr 840=usd,
 		);
 
 		$request = new WC_Isbank_Request( $this->api_url );

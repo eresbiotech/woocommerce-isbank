@@ -1,4 +1,4 @@
-jQuery(document).ready(function () {
+jQuery(document).ready(function ($) {
     $('.wc-isbank-checkout').submit(function (e) {
         e.preventDefault();
         e.stopPropagation();
@@ -18,7 +18,7 @@ jQuery(document).ready(function () {
                 opacity: 0.6
             }
         });
-
+	
         $.ajax({
             type: 'POST',
             url: wc_checkout_params.ajax_url,
@@ -26,18 +26,21 @@ jQuery(document).ready(function () {
                 action: 'validate_isbank_form',
                 pan: $form.find('input[name="pan"]').val(),
                 card_cvc: $form.find('input[name="isbank-card-cvc"]').val(),
-                card_expriy: $form.find('input[name="isbank-card-expiry"]').val()
+                card_expiry: $form.find('input[name="isbank-card-expiry"]').val(),
+		instalment:$form.find('select[name="isbank-instalment"]')?$form.find('select[name="isbank-instalment"]').val():''
             },
             dataType: 'json',
             success: function (result) {
                 if ('success' === result.result) {
 
-                    let card_expriy = $form.find('input[name="isbank-card-expiry"]').val();
-                    card_expriy = card_expriy.split(' / ');
+                    let card_expiry = $form.find('input[name="isbank-card-expiry"]').val();
+                    card_expiry = card_expiry.split(' / ');
 
-                    $form.find('#wc-isbank-cc-form').append('<input type="hidden" value="' + card_expriy[0] + '" name="Ecom_Payment_Card_ExpDate_Month">');
-                    $form.find('#wc-isbank-cc-form').append('<input type="hidden" value="' + card_expriy[1] + '" name="Ecom_Payment_Card_ExpDate_Year">');
-
+                    $form.find('#wc-isbank-cc-form').append('<input type="hidden" value="' + card_expiry[0] + '" name="Ecom_Payment_Card_ExpDate_Month">');
+                    $form.find('#wc-isbank-cc-form').append('<input type="hidden" value="' + card_expiry[1] + '" name="Ecom_Payment_Card_ExpDate_Year">');
+		 //   $form.find('input[name="hash"]').val(result.hash);
+		//	console.dir(result.hash);
+		//	console.dir($form.find('select[name="isbank-instalment"]').val());
                     e.currentTarget.submit();
                 } else if ('failure' === result.result) {
                     submit_error(result.msg);

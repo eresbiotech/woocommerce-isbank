@@ -28,6 +28,7 @@ class WC_Isbank_Request {
 
 	public function send( $nodes ) {
 		$request = $this->create_xml( $nodes );
+		var_dump($request);exit;
 
 		$ch = curl_init();
 		curl_setopt( $ch, CURLOPT_URL, $this->url );
