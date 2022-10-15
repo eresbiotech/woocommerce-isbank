@@ -116,15 +116,17 @@ class WC_Isbank_Gateway extends WC_Payment_Gateway {
 				wp_redirect( $order->get_checkout_order_received_url() );
 				exit;
 			} else {
-				var_dump($result);exit;
 				$error_message = (string) $result->ErrMsg;
 				wc_add_notice( $error_message, 'error' );
+				$order->add_order_note(json_encode($result));
+				$order->add_order_note( __( $error_message, 'wc-isbank' ) );
 				$order->add_order_note( __( 'Payment denied by bank.', 'wc-isbank' ) );
 
 				wp_redirect( $woocommerce->cart->get_cart_url() );
 				exit;
 			}
 		} else {
+            $order->add_order_note( __( '3D Confirmation Failed.', 'wc-isbank' ) );
 			wc_add_notice( __( '3D confirmation failed.', 'wc-isbank' ), 'error' );
 			wp_redirect( $woocommerce->cart->get_cart_url() );
 			exit;
