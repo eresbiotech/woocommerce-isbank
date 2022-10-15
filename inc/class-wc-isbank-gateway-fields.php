@@ -38,9 +38,9 @@ class WC_Isbank_Gateway_Fields {
 				'type'=>'select',
 				'options'=>[
 					'949'=>'TRY',
-					'830'=>'USD',	
+					'840'=>'USD',	
 				],
-				'default'=>'830'
+				'default'=>'840'
 			),
 			'instalment'=>array(
 				'title'=> __('Instalment','wc-isbank'),
