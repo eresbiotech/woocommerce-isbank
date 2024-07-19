@@ -10,7 +10,12 @@ class WC_Isbank_Gateway extends WC_Payment_Gateway {
 	private $est3Dgate_url = 'https://sanalpos.isbank.com.tr/fim/est3Dgate';
 	const CURRENCY_TRY = '949';
 	const CURRENCY_USD = '840';
-	private $instalment_enabled=false;
+  private $instalment_enabled=false;
+  private $client_id;
+	private $store_key;
+	private $api_user;
+	private $api_user_password;
+	private $currency;
 	public function __construct() {
 		$this->id                 = 'isbank';
 		$this->title              = __( 'Credit Card', 'wc-isbank' );
